@@ -8,6 +8,7 @@ class ToggleComponent extends AppComponent {
   constructor() {
     super();
     const newState = {
+      toggleState: true,
       properties: [
         {
           categoryName: 'General',
@@ -42,6 +43,15 @@ class ToggleComponent extends AppComponent {
     this.state = Object.assign(this.state, newState); // merge two states together, and dont lose any parent state properties.
   }
 
+  componentDidMount(){
+      const interactiveMode = !(this.props.propertyData.interactiveMode === undefined);
+      this.setState({interactiveMode, readOnly: interactiveMode});
+  }
+
+  toggleSwitch = () => {
+    this.setState((prevState) => ({ toggleState: !prevState.toggleState}))
+  }
+
   renderContent() {
     return (
       <div className="toggle-container">
@@ -61,7 +71,7 @@ class ToggleComponent extends AppComponent {
             checked={this.state.toggleState}
             className="toggle-input"
           />
-          <span>Toggle</span>
+          <span>Toggle...</span>
         </label>
       </div>
     );
