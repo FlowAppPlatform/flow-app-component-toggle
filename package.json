@@ -20,7 +20,8 @@
     "test:watch": "nwb test-react --server"
   },
   "dependencies": {
-    "flow-app-component": "^1.1.0"
+    "flow-app-component": "^1.1.0",
+    "react-switch": "^3.0.4"
   },
   "peerDependencies": {
     "react": "16.x"
