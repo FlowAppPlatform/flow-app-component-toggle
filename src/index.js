@@ -8,7 +8,9 @@ class ToggleComponent extends AppComponent {
   constructor() {
     super();
     const newState = {
-      toggleState: true,
+      toggleState: false,
+      interactiveMode: false,
+      readOnly: false,
       properties: [
         {
           categoryName: 'General',
@@ -47,31 +49,44 @@ class ToggleComponent extends AppComponent {
       const interactiveMode = !(this.props.propertyData.interactiveMode === undefined);
       this.setState({interactiveMode, readOnly: interactiveMode});
   }
-
-  toggleSwitch = () => {
-    this.setState((prevState) => ({ toggleState: !prevState.toggleState}))
+  toggleSwitch = (toggleState) => {
+    if(!this.state.readOnly){
+       this.setState({toggleState});
+    }else{
+        this.setState({toggleState: !toggleState});
+    }
   }
-
+  
+  handleDbClick = () => {
+      if(this.state.interactiveMode){
+          this.setState(prevState => ({readOnly: !prevState.readOnly}))
+      }
+  }
+ 
   renderContent() {
     return (
       <div className="toggle-container">
         <label htmlFor="toggle">
-          <Switch
-            onColor="#86d3ff"
-            onHandleColor="#2693e6"
-            handleDiameter={19}
-            height={15}
-            width={30}
-            uncheckedIcon={false}
-            checkedIcon={false}
-            boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-            activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-            id="toggle"
-            onChange={this.toggleSwitch}
-            checked={this.state.toggleState}
-            className="toggle-input"
-          />
-          <span>Toggle...</span>
+          <span
+              onDoubleClick={this.handleDbClick}
+          >
+            <Switch
+                onColor="#86d3ff"
+                onHandleColor="#2693e6"
+                handleDiameter={19}
+                height={15}
+                width={30}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+                activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+                id="toggle"
+                onChange={this.toggleSwitch}
+                checked={this.state.toggleState}
+                className="toggle-input"
+            />
+          </span>
+          <span>Toggle</span>
         </label>
       </div>
     );
