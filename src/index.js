@@ -22,8 +22,22 @@ class ToggleComponent extends AppComponent {
           categoryDescription: 'Events for the toggle button',
           properties: [
             {
-              id: 'event',
-              name: 'Events',
+              id: 'load',
+              name: 'Load Event',
+              type: 'graph',
+              options: {},
+              data: null,
+            },
+            {
+              id: 'hover',
+              name: 'Hover Event',
+              type: 'graph',
+              options: {},
+              data: null,
+            },
+            {
+              id: 'change',
+              name: 'Change Event',
               type: 'graph',
               options: {},
               data: null,
@@ -48,13 +62,23 @@ class ToggleComponent extends AppComponent {
   componentDidMount(){
       const interactiveMode = !(this.props.propertyData.interactiveMode === undefined);
       this.setState({interactiveMode, readOnly: interactiveMode});
+      this.triggerGraphEvent('load');
   }
+
+  triggerGraphEvent(eventId) {
+    const graphId = this.getPropertyData(eventId);
+    if (typeof this.getElementProps().onEvent === 'function') {
+      this.getElementProps().onEvent(graphId);
+    }
+  }
+
   toggleSwitch = (toggleState) => {
     if(!this.state.readOnly){
        this.setState({toggleState});
     }else{
         this.setState({toggleState: !toggleState});
     }
+    this.triggerGraphEvent('change')
   }
   
   handleDbClick = () => {
@@ -65,7 +89,10 @@ class ToggleComponent extends AppComponent {
  
   renderContent() {
     return (
-      <div className="toggle-container">
+      <div 
+        className="toggle-container"
+        onMouseOver={() => this.triggerGraphEvent('hover')}
+      >
         <label htmlFor="toggle">
           <span
               onDoubleClick={this.handleDbClick}
